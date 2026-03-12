@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edetabel</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg1: #eef6ff;
+      --bg2: #fdf7ff;
+      --card: rgba(255,255,255,0.88);
+      --line: rgba(99, 102, 241, 0.18);
+      --text: #1f2a44;
+      --muted: #5f6b85;
+      --primary: #4f46e5;
+      --primary-2: #7c3aed;
+      --accent: #06b6d4;
+      --gold: #f59e0b;
+      --danger-bg: #fff1f2;
+      --danger-text: #be123c;
+      --shadow: 0 18px 40px rgba(79, 70, 229, 0.12);
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(79,70,229,0.12) 0, rgba(79,70,229,0) 22%),
+        radial-gradient(circle at 88% 14%, rgba(6,182,212,0.12) 0, rgba(6,182,212,0) 20%),
+        radial-gradient(circle at 80% 82%, rgba(245,158,11,0.14) 0, rgba(245,158,11,0) 18%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before,
+    body::after {
+      content: "π π π π π π π";
+      position: fixed;
+      color: rgba(79, 70, 229, 0.06);
+      font-size: 42px;
+      font-weight: bold;
+      letter-spacing: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      top: 60px;
+      left: -120px;
+      transform: rotate(-8deg);
+    }
+    body::after {
+      bottom: 60px;
+      right: -180px;
+      transform: rotate(8deg);
+    }
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 34px 20px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(79,70,229,0.95), rgba(124,58,237,0.92));
+      color: white;
+      border-radius: 28px;
+      padding: 28px 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero::before {
+      content: "π";
+      position: absolute;
+      right: 28px;
+      top: -8px;
+      font-size: 140px;
+      line-height: 1;
+      color: rgba(255,255,255,0.12);
+      font-weight: bold;
+    }
+    .hero::after {
+      content: "";
+      display:none;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 38px;
+      line-height: 1.1;
+    }
+    .subtitle {
+      max-width: 760px;
+      color: rgba(255,255,255,0.9);
+      font-size: 17px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      backdrop-filter: blur(4px);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .card h2 {
+      margin: 0 0 16px;
+      font-size: 24px;
+    }
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #31405e;
+    }
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #d8def6;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      font-size: 16px;
+      outline: none;
+      background: rgba(255,255,255,0.95);
+      transition: 0.2s ease;
+    }
+    input:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.12);
+    }
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+    }
+    .primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      width: 100%;
+      margin-bottom: 10px;
+      box-shadow: 0 10px 22px rgba(79,70,229,0.24);
+    }
+    .secondary {
+      background: rgba(79,70,229,0.08);
+      color: #3730a3;
+    }
+    .danger {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+    }
+    .error {
+      background: #fff4f6;
+      color: #be123c;
+      border: 1px solid #fecdd3;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .info-box {
+      margin-top: 18px;
+      background: linear-gradient(135deg, rgba(6,182,212,0.09), rgba(79,70,229,0.08));
+      border: 1px solid rgba(79,70,229,0.12);
+      border-radius: 18px;
+      padding: 14px 15px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .table-shell {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(99,102,241,0.12);
+      background: rgba(255,255,255,0.72);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead {
+      background: linear-gradient(135deg, rgba(79,70,229,0.12), rgba(6,182,212,0.1));
+    }
+    th, td {
+      padding: 13px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(99,102,241,0.1);
+    }
+    th {
+      color: #334155;
+      font-size: 14px;
+    }
+    tbody tr:nth-child(even) {
+      background: rgba(248,250,252,0.9);
+    }
+    tbody tr:hover {
+      background: rgba(238,242,255,0.8);
+    }
+    tbody tr.top1 {
+      background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(255,255,255,0.95));
+    }
+    .place-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      font-weight: bold;
+      background: rgba(79,70,229,0.08);
+      color: #3730a3;
+    }
+    .top1 .place-badge {
+      background: rgba(245,158,11,0.18);
+      color: #92400e;
+    }
+    .center {
+      text-align: center;
+    }
+    .score {
+      font-weight: bold;
+      font-size: 17px;
+      color: #1e1b4b;
+    }
+    .delete-btn {
+      background: transparent;
+      color: #dc2626;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+    .delete-btn:hover {
+      background: rgba(220,38,38,0.08);
+      transform: none;
+    }
+    .empty {
+      padding: 36px 22px;
+      text-align: center;
+      color: var(--muted);
+      border: 2px dashed #c7d2fe;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat {
+      border-radius: 18px;
+      padding: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(238,242,255,0.9));
+      border: 1px solid rgba(99,102,241,0.1);
+    }
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #312e81;
+    }
+    @media (max-width: 860px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 30px;
+      }
+      .hero::before,
+      .hero::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>π-päeva matemaatika edetabel</h1>
+      <div class="subtitle">
+        Sisesta õpilase nimi, klass ja tulemus. Tulemused kuvatakse kohe edetabelis ning jäävad alles ka pärast refreshi. Sobib hästi matemaatika PI päeva punktide kogumiseks ja kiireks võrdlemiseks.
+      </div>
+      <div class="pill-row">
+        <div class="pill">Matemaatika päev</div>
+        <div class="pill">Tulemused salvestuvad automaatselt</div>
+        <div class="pill">Edetabel reaalajas</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="card">
+        <h2>Andmete sisestamine</h2>
+
+        <div id="errorBox" class="error"></div>
+
+        <label for="nimi">Nimi</label>
+        <input type="text" id="nimi" placeholder="Näiteks Mari Maasikas" />
+
+        <label for="klass">Klass</label>
+        <input type="text" id="klass" placeholder="Näiteks 5.A" />
+
+        <label for="tulemus">Tulemus</label>
+        <input type="number" id="tulemus" placeholder="Näiteks 48" />
+
+        <button class="primary" onclick="lisaTulemus()">Lisa tulemus</button>
+
+        <div class="button-row">
+          <button class="secondary" onclick="laadiCSV()">Laadi CSV alla</button>
+          <button class="danger" onclick="kustutaKoik()">Kustuta kõik</button>
+        </div>
+
+        <div class="info-box">
+          <strong>PI päeva idee:</strong> kasuta tulemuseks näiteks õigete vastuste arvu, π-numbrite meeldejätmise punktisummat või ülesannete lahendamise koguskoori.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Edetabel</h2>
+        <div class="stats" id="statsBox"></div>
+        <div id="tabeliSisu"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#64748b; font-size:13px; margin-top:22px; padding-bottom:10px;">
+      © 2026 Matemaatika PI päeva edetabel. Lubatud kasutada mitteärilistel eesmärkidel.
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'edetabel_andmed';
+    let andmed = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+    function salvesta() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(andmed));
+    }
+
+    function naitaViga(teade) {
+      const box = document.getElementById('errorBox');
+      box.textContent = teade;
+      box.style.display = 'block';
+    }
+
+    function peidaViga() {
+      const box = document.getElementById('errorBox');
+      box.textContent = '';
+      box.style.display = 'none';
+    }
+
+    function lisaTulemus() {
+      const nimi = document.getElementById('nimi').value.trim();
+      const klass = document.getElementById('klass').value.trim();
+      const tulemus = document.getElementById('tulemus').value.trim();
+
+      peidaViga();
+
+      if (!nimi || !klass || !tulemus) {
+        naitaViga('Palun sisesta nimi, klass ja tulemus.');
+        return;
+      }
+
+      if (isNaN(tulemus)) {
+        naitaViga('Tulemus peab olema number.');
+        return;
+      }
+
+      andmed.push({
+        id: Date.now() + Math.random(),
+        nimi,
+        klass,
+        tulemus: Number(tulemus)
+      });
+
+      salvesta();
+      kuvaEdetabel();
+
+      document.getElementById('nimi').value = '';
+      document.getElementById('klass').value = '';
+      document.getElementById('tulemus').value = '';
+    }
+
+    function kustutaKirje(id) {
+      andmed = andmed.filter(rida => rida.id !== id);
+      salvesta();
+      kuvaEdetabel();
+    }
+
+    function kustutaKoik() {
+      if (!confirm('Kas oled kindel, et soovid kogu edetabeli kustutada?')) {
+        return;
+      }
+      andmed = [];
+      salvesta();
+      kuvaEdetabel();
+    }
+
+    function kuvaEdetabel() {
+      const tabeliSisu = document.getElementById('tabeliSisu');
+      const statsBox = document.getElementById('statsBox');
+
+      if (andmed.length === 0) {
+        statsBox.innerHTML = `
+          <div class="stat"><div class="stat-label">Osalejaid</div><div class="stat-value">0</div></div>
+          <div class="stat"><div class="stat-label">Parim tulemus</div><div class="stat-value">–</div></div>
+          <div class="stat"><div class="stat-label">Klasside arv</div><div class="stat-value">0</div></div>
+        `;
+        tabeliSisu.innerHTML = '<div class="empty">Edetabel on praegu tühi.<br>Lisa esimene tulemus ja alusta π-päeva võistlust.</div>';
+        return;
+      }
+
+      const sorditud = [...andmed].sort((a, b) => b.tulemus - a.tulemus);
+
+      const klassid = new Set(andmed.map(rida => rida.klass.trim().toLowerCase()).filter(Boolean));
+      statsBox.innerHTML = `
+        <div class="stat"><div class="stat-label">Osalejaid</div><div class="stat-value">${andmed.length}</div></div>
+        <div class="stat"><div class="stat-label">Parim tulemus</div><div class="stat-value">${sorditud[0].tulemus}</div></div>
+        <div class="stat"><div class="stat-label">Klasside arv</div><div class="stat-value">${klassid.size}</div></div>
+      `;
+
+      let html = `
+        <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Koht</th>
+              <th>Nimi</th>
+              <th>Klass</th>
+              <th>Tulemus</th>
+              <th class="center">X</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      sorditud.forEach((rida, index) => {
+        const reaClass = index === 0 ? 'top1' : '';
+        html += `
+          <tr class="${reaClass}">
+            <td><span class="place-badge">${index + 1}</span></td>
+            <td>${escapeHtml(rida.nimi)}</td>
+            <td>${escapeHtml(rida.klass)}</td>
+            <td class="score">${rida.tulemus}</td>
+            <td class="center">
+              <button class="delete-btn" onclick="kustutaKirje(${rida.id})">×</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table></div>';
+      tabeliSisu.innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function laadiCSV() {
+      if (andmed.length === 0) {
+        alert('Edetabel on tühi.');
+        return;
+      }
+
+      const sorditud = [...andmed].sort((a, b) => b.tulemus - a.tulemus);
+      const read = ['Koht,Nimi,Klass,Tulemus'];
+
+      sorditud.forEach((rida, index) => {
+        read.push(`${index + 1},"${rida.nimi.replace(/"/g, '""')}","${rida.klass.replace(/"/g, '""')}",${rida.tulemus}`);
+      });
+
+      const blob = new Blob([read.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'edetabel.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    kuvaEdetabel();
+  </script>
+</body>
+</html>
